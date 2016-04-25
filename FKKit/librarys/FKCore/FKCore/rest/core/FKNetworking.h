@@ -7,22 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "FKNetworkTask.h"
 
 @interface FKNetworking : NSObject
 
-- (void)bundingRequestClass:(Class)requestclass forRequestHandler:(Class)handler;
-- (void)unbundingRequestClass:(Class)requestclass;
-- (void)removeAllBundings;
-/**
- *
- */
-- (BOOL)canHandleRequest:(NSURLRequest *)request;
-
-/**
- */
 - (FKNetworkTask *)networkTaskWithRequest:(NSURLRequest *)request
                            completionBlock:(FKURLRequestCompletionBlock)completionBlock;
+
 
 @end

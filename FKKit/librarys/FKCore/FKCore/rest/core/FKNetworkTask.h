@@ -7,13 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "FKURLRequestDelegate.h"
 #import "FKURLRequestHandler.h"
-#import "FKRequestSerialization.h"
-#import "FKResopnseSerialization.h"
 
-typedef void (^FKURLRequestCompletionBlock)(NSURLResponse *response, NSData *data, NSError *error);
+typedef void (^FKURLRequestCompletionBlock)(NSURLResponse *response, id responseObj, NSError *error);
 typedef void (^FKURLRequestCancellationBlock)(void);
 typedef void (^FKURLRequestIncrementalDataBlock)(NSData *data);
 typedef void (^FKURLRequestProgressBlock)(int64_t progress, int64_t total);
@@ -26,15 +23,12 @@ typedef void (^FKURLRequestResponseBlock)(NSURLResponse *response);
 @property (nonatomic, readonly, weak) id requestToken;
 @property (nonatomic, readonly) NSURLResponse *response;
 @property (nonatomic, readonly) FKURLRequestCompletionBlock completionBlock;
-
+// set call back
 @property (nonatomic, copy) FKURLRequestProgressBlock downloadProgressBlock;
 @property (nonatomic, copy) FKURLRequestIncrementalDataBlock incrementalDataBlock;
 @property (nonatomic, copy) FKURLRequestResponseBlock responseBlock;
 @property (nonatomic, copy) FKURLRequestProgressBlock uploadProgressBlock;
 
-//针对每一个请求来指定相应的serializer
-@property (nonatomic, strong) FKHttpRequestSerializer <FKRequestSerialization> * requestSerializer;
-@property (nonatomic, strong) FKResopnseSerializer <FKResopnseSerialization> * responseSerializer;
 
 - (instancetype)initWithRequest:(NSURLRequest *)request
                         handler:(id<FKURLRequestHandler>)handler

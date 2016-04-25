@@ -50,7 +50,7 @@
     if (!_session && [self isValid]) {
         
         NSOperationQueue *callbackQueue = [NSOperationQueue new];
-        callbackQueue.maxConcurrentOperationCount = 1;
+        callbackQueue.maxConcurrentOperationCount = 5;
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         _session = [NSURLSession sessionWithConfiguration:configuration
                                                  delegate:self

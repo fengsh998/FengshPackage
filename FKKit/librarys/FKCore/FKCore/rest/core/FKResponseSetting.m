@@ -1,14 +1,21 @@
 //
-//  FKResopnseSerialization.m
+//  FKResponseSetting.m
 //  FKCore
 //
-//  Created by fengsh on 16/3/14.
+//  Created by fengsh on 16/4/16.
 //  Copyright © 2016年 fengsh. All rights reserved.
 //
 
-#import "FKResopnseSerialization.h"
+#import "FKResponseSetting.h"
 
-@implementation FKResopnseSerializer
+@implementation FKResponseSetting
+
+- (BOOL)validateResponse:( NSHTTPURLResponse *)response
+                    data:( NSData *)data
+                   error:(NSError * *)error
+{
+    return YES;
+}
 
 + (BOOL)supportsSecureCoding
 {
@@ -22,12 +29,6 @@
     return nil;
 }
 
-- (BOOL)validateResponse:( NSHTTPURLResponse *)response
-                    data:( NSData *)data
-                   error:(NSError * *)error
-{
-    return NO;
-}
 
 - (id)copyWithZone:(nullable NSZone *)zone
 {
@@ -43,6 +44,5 @@
 {
     return nil;
 }
-
 
 @end

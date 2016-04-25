@@ -8,6 +8,7 @@
 
 #import "FKNetworkTask.h"
 
+
 #define FUNCTION_NOT_IMPLEMENTED(method) \
 _Pragma("clang diagnostic push") \
 _Pragma("clang diagnostic ignored \"-Wmissing-method-return-type\"") \
@@ -27,10 +28,11 @@ NSException *_FKNotImplementedException(SEL cmd, Class cls)
 
 @implementation FKNetworkTask
 {
-    NSMutableData *_data;
-    id<FKURLRequestHandler> _handler;
-    FKNetworkTask *_selfReference;
+    NSMutableData                   *_data;
+    id<FKURLRequestHandler>         _handler;
+    FKNetworkTask                   *_selfReference;
 }
+
 
 - (instancetype)initWithRequest:(NSURLRequest *)request
                         handler:(id<FKURLRequestHandler>)handler
@@ -39,8 +41,8 @@ NSException *_FKNotImplementedException(SEL cmd, Class cls)
     static NSUInteger requestID = 0;
     
     if ((self = [super init])) {
-        _requestID = @(requestID++);
         _request = request;
+        _requestID = @(requestID++);
         _handler = handler;
         _completionBlock = completionBlock;
     }
@@ -63,8 +65,6 @@ FUNCTION_NOT_IMPLEMENTED(- (instancetype)init)
 - (void)start
 {
     if (_requestToken == nil) {
-        //TODO : requestSerializer
-        
         
         if ([self validateRequestToken:[_handler sendRequest:_request
                                                 withDelegate:self]]) {
@@ -144,8 +144,6 @@ FUNCTION_NOT_IMPLEMENTED(- (instancetype)init)
 {
     if ([self validateRequestToken:requestToken]) {
         if (_completionBlock) {
-            
-            ////TODO : responseSerializer
             _completionBlock(_response, _data, error);
             [self invalidate];
         }
