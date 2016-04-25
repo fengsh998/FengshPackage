@@ -8,7 +8,7 @@
 
 #import "FKNetworkClient.h"
 #import "FKHttpRequestSettings.h"
-#import "FKNetworkUnits.h"
+#import "FKQueryStringPair.h"
 #import "FKHttpResponseSettings.h"
 
 @interface FKNetworkClient()

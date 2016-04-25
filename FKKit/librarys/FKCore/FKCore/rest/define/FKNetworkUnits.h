@@ -8,15 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-//Gzip 压缩
-NSData *FKGzipData(NSData *input, float level);
-// 从dic 中获取querystring
-FOUNDATION_EXPORT NSArray * QueryStringPairsFromDictionary(NSDictionary *dictionary);
-// 通过key value 的方式生成 querystring
-FOUNDATION_EXPORT NSArray * QueryStringPairsFromKeyAndValue(NSString *key, id value);
-
-FOUNDATION_EXPORT NSString * PercentEscapedStringFromString(NSString *string);
-
-NSString * Base64EncodedStringFromString(NSString *string);
-
-NSString * QueryStringFromParameters(NSDictionary *parameters);
+@interface FKNetworkUnits : NSObject
+//Gzip 压缩 level -1 /* default */
++ (NSData *)FKGzipData:(NSData *)input withLevel:(float)level;
+//string 转为base64 string
++ (NSString *)Base64EncodedStringFromString:(NSString *)string;
+@end

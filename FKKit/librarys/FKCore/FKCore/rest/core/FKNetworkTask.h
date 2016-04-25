@@ -10,7 +10,15 @@
 #import "FKURLRequestDelegate.h"
 #import "FKURLRequestHandler.h"
 
+/**
+ *  响应完成callback
+ *
+ *  @param response    http 响应信息
+ *  @param responseObj 响应对象
+ *  @param error       错误描述
+ */
 typedef void (^FKURLRequestCompletionBlock)(NSURLResponse *response, id responseObj, NSError *error);
+///请求取消
 typedef void (^FKURLRequestCancellationBlock)(void);
 typedef void (^FKURLRequestIncrementalDataBlock)(NSData *data);
 typedef void (^FKURLRequestProgressBlock)(int64_t progress, int64_t total);

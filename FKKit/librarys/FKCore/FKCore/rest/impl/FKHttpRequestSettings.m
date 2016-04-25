@@ -145,7 +145,7 @@ forHTTPHeaderField:(NSString *)field
                                        password:(NSString *)password
 {
     NSString *basicAuthCredentials = [NSString stringWithFormat:@"%@:%@", username, password];
-    [self setValue:[NSString stringWithFormat:@"Basic %@", Base64EncodedStringFromString(basicAuthCredentials)] forHTTPHeaderField:@"Authorization"];
+    [self setValue:[NSString stringWithFormat:@"Basic %@", [FKNetworkUnits Base64EncodedStringFromString:basicAuthCredentials]] forHTTPHeaderField:@"Authorization"];
 }
 
 - (void)clearAuthorizationHeader {

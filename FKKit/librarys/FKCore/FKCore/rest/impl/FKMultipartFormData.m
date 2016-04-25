@@ -9,9 +9,6 @@
 #import "FKMultipartFormData.h"
 #import "FKNetworkingError.h"
 
-NSString * const FKURLRequestErrorDomain = @"com.fk.error.request";
-NSString * const FKNetworkingOperationFailingURLRequestErrorKey = @"com.fk.request.error.response";
-
 typedef enum {
     FKEncapsulationBoundaryPhase = 1,
     FKHeaderPhase                = 2,
@@ -128,7 +125,7 @@ static inline NSString * FKContentTypeForPathExtension(NSString *extension) {
 }
 
 - (BOOL)hasBytesAvailable {
-    // Allows `read:maxLength:` to be called again if `AFMultipartFormFinalBoundary` doesn't fit into the available buffer
+    // Allows `read:maxLength:` to be called again if `FKMultipartFormFinalBoundary` doesn't fit into the available buffer
     if (_phase == FKFinalBoundaryPhase) {
         return YES;
     }
@@ -493,16 +490,16 @@ static inline NSString * FKContentTypeForPathExtension(NSString *extension) {
     NSParameterAssert(mimeType);
     
     if (![fileURL isFileURL]) {
-        NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedStringFromTable(@"Expected URL to be a file URL", @"AFNetworking", nil)};
+        NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedStringFromTable(@"Expected URL to be a file URL", @"FKNetworking", nil)};
         if (error) {
-            *error = [[NSError alloc] initWithDomain:FKURLRequestErrorDomain code:NSURLErrorBadURL userInfo:userInfo];
+            *error = [[NSError alloc] initWithDomain:URLRequestErrorDomain code:NSURLErrorBadURL userInfo:userInfo];
         }
         
         return NO;
     } else if ([fileURL checkResourceIsReachableAndReturnError:error] == NO) {
         NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedStringFromTable(@"File URL not reachable.", @"FKNetworking", nil)};
         if (error) {
-            *error = [[NSError alloc] initWithDomain:FKURLRequestErrorDomain code:NSURLErrorBadURL userInfo:userInfo];
+            *error = [[NSError alloc] initWithDomain:URLRequestErrorDomain code:NSURLErrorBadURL userInfo:userInfo];
         }
         
         return NO;

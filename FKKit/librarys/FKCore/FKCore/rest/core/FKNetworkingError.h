@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const URLRequestErrorDomain;
+extern NSString * const NetworkingOperationFailingURLRequestErrorKey;
+
 extern NSString * const URLResponseErrorDomain;
 extern NSString * const NetworkingOperationFailingURLResponseErrorKey;
 extern NSString * const NetworkingOperationFailingURLResponseDataErrorKey;

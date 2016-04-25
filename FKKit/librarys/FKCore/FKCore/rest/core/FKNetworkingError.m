@@ -8,13 +8,17 @@
 
 #import "FKNetworkingError.h"
 
+//response
 NSString * const URLResponseErrorDomain = @"com.fk.error.response";
 NSString * const NetworkingOperationFailingURLResponseErrorKey = @"com.fk.error.response.error.response";
 NSString * const NetworkingOperationFailingURLResponseDataErrorKey = @"com.fk.error.response.error.data";
 
+// request
+NSString * const URLRequestErrorDomain = @"com.fk.error.request";
+NSString * const NetworkingOperationFailingURLRequestErrorKey = @"com.fk.request.error.response";
+
 @implementation FKNetworkingError
 
-//NSError * FKErrorWithUnderlyingError(NSError *error, NSError *underlyingError)
 + (NSError *)FKErrorWithUnderlyingError:(NSError *)error withUnderlyingError:(NSError *)underlyingError;
 {
     if (!error) {
@@ -31,25 +35,23 @@ NSString * const NetworkingOperationFailingURLResponseDataErrorKey = @"com.fk.er
     return [[NSError alloc] initWithDomain:error.domain code:error.code userInfo:mutableUserInfo];
 }
 
-//BOOL FKErrorOrUnderlyingErrorHasCodeInDomain(NSError *error, NSInteger code, NSString *domain)
+
 + (BOOL)FKErrorOrUnderlyingErrorHasCodeInDomain:(NSError *)error withCode:(NSInteger) code withDomain:(NSString *)domain
 {
     if ([error.domain isEqualToString:domain] && error.code == code) {
         return YES;
     } else if (error.userInfo[NSUnderlyingErrorKey]) {
-        return [self FKErrorOrUnderlyingErrorHasCodeInDomain:error.userInfo[NSUnderlyingErrorKey] withCode:code withDomain:domain]; //FKErrorOrUnderlyingErrorHasCodeInDomain(error.userInfo[NSUnderlyingErrorKey], code, domain);
+        return [self FKErrorOrUnderlyingErrorHasCodeInDomain:error.userInfo[NSUnderlyingErrorKey] withCode:code withDomain:domain];
     }
     
     return NO;
 }
 
-//id JSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions readingOptions)
 + (id)JSONObjectByRemovingKeysWithNullValues:(id)JSONObject withJsonReadingOptions:(NSJSONReadingOptions) readingOptions
 {
     if ([JSONObject isKindOfClass:[NSArray class]]) {
         NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:[(NSArray *)JSONObject count]];
         for (id value in (NSArray *)JSONObject) {
-//            [mutableArray addObject:JSONObjectByRemovingKeysWithNullValues(value, readingOptions)];
             [mutableArray addObject:[self JSONObjectByRemovingKeysWithNullValues:value withJsonReadingOptions:readingOptions]];
         }
         
@@ -61,7 +63,7 @@ NSString * const NetworkingOperationFailingURLResponseDataErrorKey = @"com.fk.er
             if (!value || [value isEqual:[NSNull null]]) {
                 [mutableDictionary removeObjectForKey:key];
             } else if ([value isKindOfClass:[NSArray class]] || [value isKindOfClass:[NSDictionary class]]) {
-                mutableDictionary[key] = [self JSONObjectByRemovingKeysWithNullValues:value withJsonReadingOptions:readingOptions];//JSONObjectByRemovingKeysWithNullValues(value, readingOptions);
+                mutableDictionary[key] = [self JSONObjectByRemovingKeysWithNullValues:value withJsonReadingOptions:readingOptions];
             }
         }
         
