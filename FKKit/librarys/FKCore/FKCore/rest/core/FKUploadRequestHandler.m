@@ -1,21 +1,18 @@
 //
-//  FKHttpRequestHandler.m
+//  FKUploadRequestHandler.m
 //  FKCore
 //
-//  Created by fengsh on 16/3/10.
+//  Created by fengsh on 16/4/25.
 //  Copyright © 2016年 fengsh. All rights reserved.
 //
-//              默认http/https请求
-//
-//
 
-#import "FKHttpRequestHandler.h"
+#import "FKUploadRequestHandler.h"
 
-@interface FKHttpRequestHandler () <NSURLSessionDataDelegate>
+@interface FKUploadRequestHandler()<NSURLSessionDataDelegate>
 
 @end
 
-@implementation FKHttpRequestHandler
+@implementation FKUploadRequestHandler
 {
     NSMapTable *_delegates;
     NSURLSession *_session;
@@ -44,43 +41,23 @@
     return [schemes containsObject:request.URL.scheme.lowercaseString];
 }
 
-- (id)sendRequest:(NSURLRequest *)request
-     withDelegate:(id<FKURLRequestDelegate>)delegate
-{
-    if (!_session && [self isValid]) {
-        
-        NSOperationQueue *callbackQueue = [NSOperationQueue new];
-        callbackQueue.maxConcurrentOperationCount = 5;
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _session = [NSURLSession sessionWithConfiguration:configuration
-                                                 delegate:self
-                                            delegateQueue:callbackQueue];
-        
-        _delegates = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsStrongMemory
-                                               valueOptions:NSPointerFunctionsStrongMemory
-                                                   capacity:0];
-    }
-    
-    NSURLSessionDataTask *task = [_session dataTaskWithRequest:request];
-    [_delegates setObject:delegate forKey:task];
-    [task resume];
-    return task;
-}
-
 - (void)cancelRequest:(NSURLSessionDataTask *)task
 {
     [task cancel];
     [_delegates removeObjectForKey:task];
 }
 
+- (void)suspendRequest:(NSURLSessionDataTask *)task
+{
+    [task suspend];
+}
+
+- (void)resumeRequest:(NSURLSessionDataTask *)task
+{
+    [task resume];
+}
+
 #pragma mark - NSURLSession 委托
-/**
- *  @param session                  URLSession
- *  @param task                     task
- *  @param bytesSent                单次发送的大小
- *  @param totalBytesSent           多次发送后累加的大小
- *  @param totalBytesExpectedToSend 总大小
- */
 - (void)URLSession:(NSURLSession *)session
               task:(NSURLSessionTask *)task
    didSendBodyData:(int64_t)bytesSent
@@ -110,6 +87,55 @@ didReceiveResponse:(NSURLResponse *)response
 {
     [[_delegates objectForKey:task] URLRequest:task didCompleteWithError:error];
     [_delegates removeObjectForKey:task];
+}
+
+- (void)configSession
+{
+    if (!_session && [self isValid]) {
+        
+        NSOperationQueue *callbackQueue = [NSOperationQueue new];
+        callbackQueue.maxConcurrentOperationCount = 5;
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _session = [NSURLSession sessionWithConfiguration:configuration
+                                                 delegate:self
+                                            delegateQueue:callbackQueue];
+        
+        _delegates = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsStrongMemory
+                                               valueOptions:NSPointerFunctionsStrongMemory
+                                                   capacity:0];
+    }
+}
+
+- (id)sendRequest:(NSURLRequest *)request
+withUploadFileUrl:(NSString *)fileurl
+     withDelegate:(id<FKURLRequestDelegate>)delegate
+{
+    [self configSession];
+    
+    NSURL *furl = [NSURL fileURLWithPath:fileurl];
+    
+    NSURLSessionUploadTask *task = [_session uploadTaskWithRequest:request fromFile:furl];
+    [_delegates setObject:delegate forKey:task];
+    [task resume];
+    return task;
+}
+
+- (id)sendRequest:(NSURLRequest *)request
+   withUploadData:(NSData *)data
+     withDelegate:(id<FKURLRequestDelegate>)delegate
+{
+    [self configSession];
+    
+    NSURLSessionDataTask *task = [_session uploadTaskWithRequest:request fromData:data];
+    [_delegates setObject:delegate forKey:task];
+    [task resume];
+    return task;
+}
+
+- (id)sendRequest:(NSURLRequest *)request
+     withDelegate:(id<FKURLRequestDelegate>)delegate
+{
+    return nil;
 }
 
 @end

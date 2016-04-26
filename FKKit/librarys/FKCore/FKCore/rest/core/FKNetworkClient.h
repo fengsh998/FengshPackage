@@ -51,6 +51,13 @@
                             withParams:(id)params
                        completionBlock:(FKURLRequestCompletionBlock)completionBlock;
 
+- (FKNetworkTask *)requestHEADUrlString:(NSString *)urlstring
+                                headers:(NSDictionary *)headers
+                             withParams:(id)params
+                                 method:(NSString *)method
+                           withFilepath:(NSString *)filepath
+                        completionBlock:(FKURLRequestCompletionBlock)completionBlock;
+
 @end
 
 /*

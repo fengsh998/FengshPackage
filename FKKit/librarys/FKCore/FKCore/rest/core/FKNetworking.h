@@ -14,5 +14,12 @@
 - (FKNetworkTask *)networkTaskWithRequest:(NSURLRequest *)request
                            completionBlock:(FKURLRequestCompletionBlock)completionBlock;
 
+- (FKNetworkTask *)sendRequest:(NSURLRequest *)request
+             withUploadFileUrl:(NSString *)fileurl
+               completionBlock:(FKURLRequestCompletionBlock)completionBlock;
+
+- (FKNetworkTask *)sendRequest:(NSURLRequest *)request
+                withUploadData:(NSData *)data
+               completionBlock:(FKURLRequestCompletionBlock)completionBlock;
 
 @end

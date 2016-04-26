@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		9D1582781CCDB967002AACA8 /* FKQueryStringPair.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D1582761CCDB967002AACA8 /* FKQueryStringPair.h */; };
 		9D1582791CCDB967002AACA8 /* FKQueryStringPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D1582771CCDB967002AACA8 /* FKQueryStringPair.m */; };
+		9D15827C1CCE2D97002AACA8 /* FKUploadRequestHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D15827A1CCE2D97002AACA8 /* FKUploadRequestHandler.h */; };
+		9D15827D1CCE2D97002AACA8 /* FKUploadRequestHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D15827B1CCE2D97002AACA8 /* FKUploadRequestHandler.m */; };
 		9D4773EA1CBFBA6B0034E596 /* FKNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D4773E61CBFBA6B0034E596 /* FKNetworking.h */; };
 		9D4773EB1CBFBA6B0034E596 /* FKNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D4773E71CBFBA6B0034E596 /* FKNetworking.m */; };
 		9D4773EC1CBFBA6B0034E596 /* FKNetworkTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D4773E81CBFBA6B0034E596 /* FKNetworkTask.h */; };
@@ -61,6 +63,8 @@
 /* Begin PBXFileReference section */
 		9D1582761CCDB967002AACA8 /* FKQueryStringPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKQueryStringPair.h; sourceTree = "<group>"; };
 		9D1582771CCDB967002AACA8 /* FKQueryStringPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKQueryStringPair.m; sourceTree = "<group>"; };
+		9D15827A1CCE2D97002AACA8 /* FKUploadRequestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKUploadRequestHandler.h; sourceTree = "<group>"; };
+		9D15827B1CCE2D97002AACA8 /* FKUploadRequestHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKUploadRequestHandler.m; sourceTree = "<group>"; };
 		9D4773E61CBFBA6B0034E596 /* FKNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKNetworking.h; sourceTree = "<group>"; };
 		9D4773E71CBFBA6B0034E596 /* FKNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKNetworking.m; sourceTree = "<group>"; };
 		9D4773E81CBFBA6B0034E596 /* FKNetworkTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKNetworkTask.h; sourceTree = "<group>"; };
@@ -113,6 +117,8 @@
 			children = (
 				9D4773EF1CBFBAC80034E596 /* FKHttpRequestHandler.h */,
 				9D4773F01CBFBAC80034E596 /* FKHttpRequestHandler.m */,
+				9D15827A1CCE2D97002AACA8 /* FKUploadRequestHandler.h */,
+				9D15827B1CCE2D97002AACA8 /* FKUploadRequestHandler.m */,
 			);
 			name = handler;
 			sourceTree = "<group>";
@@ -228,6 +234,7 @@
 				9D80E5471C968C0A0008BCEF /* FKCore.h in Headers */,
 				9DC0386F1CC4BFEF00825CDC /* FKJsonRequestSettings.h in Headers */,
 				9D1582781CCDB967002AACA8 /* FKQueryStringPair.h in Headers */,
+				9D15827C1CCE2D97002AACA8 /* FKUploadRequestHandler.h in Headers */,
 				9D47741A1CC275180034E596 /* FKNetworkUnits.h in Headers */,
 				9D4773F11CBFBAC80034E596 /* FKHttpRequestHandler.h in Headers */,
 				9DC038791CC4CEB000825CDC /* FKNetworkingError.h in Headers */,
@@ -313,6 +320,7 @@
 				9D4774231CC2794B0034E596 /* FKHttpRequestSettings.m in Sources */,
 				9DFBC2D11CCA2A650006FD9B /* FKMultipartFormData.m in Sources */,
 				9D4773ED1CBFBA6B0034E596 /* FKNetworkTask.m in Sources */,
+				9D15827D1CCE2D97002AACA8 /* FKUploadRequestHandler.m in Sources */,
 				9D4774131CC2171A0034E596 /* FKRequestSetting.m in Sources */,
 				9D80E5391C9686DF0008BCEF /* FKNetworkingManager.m in Sources */,
 				9DC0387A1CC4CEB000825CDC /* FKNetworkingError.m in Sources */,

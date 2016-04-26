@@ -11,28 +11,58 @@
 
 #import "FKURLRequestDelegate.h"
 
-/**
- */
-@protocol FKURLRequestHandler <NSObject>
+@protocol FKURLHandler <NSObject>
 
 /**
+    判断是否符合条件发起请求
  */
 - (BOOL)canHandleRequest:(NSURLRequest *)request;
 
+@optional
+
+/**
+ *  取消请求
+ */
+- (void)cancelRequest:(id)requestToken;
+
+/**
+ *  暂停请求
+ */
+- (void)suspendRequest:(id)requestToken;
+
+/**
+ *  恢复请求
+ */
+
+- (void)resumeRequest:(id)requestToken;
+
+/**
+ 优先级，默认为0
+ */
+- (float)handlerPriority;
+
+
+@end
+
 /**
  */
+@protocol FKURLRequestHandler <FKURLHandler>
+
 - (id)sendRequest:(NSURLRequest *)request
      withDelegate:(id<FKURLRequestDelegate>)delegate;
 
 @optional
 
-- (void)cancelRequest:(id)requestToken;
 
-/**
-    优先级，默认为0
- */
-- (float)handlerPriority;
+- (id)sendRequest:(NSURLRequest *)request
+withUploadFileUrl:(NSString *)fileurl
+     withDelegate:(id<FKURLRequestDelegate>)delegate;
+
+- (id)sendRequest:(NSURLRequest *)request
+   withUploadData:(NSData *)data
+     withDelegate:(id<FKURLRequestDelegate>)delegate;
 
 @end
+
 
 #endif /* FKURLRequestHandler_h */

@@ -27,11 +27,6 @@ NSException *_FKNotImplementedException(SEL cmd, Class cls)
 }
 
 @implementation FKNetworkTask
-{
-    NSMutableData                   *_data;
-    id<FKURLRequestHandler>         _handler;
-    FKNetworkTask                   *_selfReference;
-}
 
 
 - (instancetype)initWithRequest:(NSURLRequest *)request
@@ -82,6 +77,22 @@ FUNCTION_NOT_IMPLEMENTED(- (instancetype)init)
     [self invalidate];
 }
 
+- (void)suspend
+{
+    __strong id strongToken = _requestToken;
+    if (strongToken && [_handler respondsToSelector:@selector(suspendRequest:)]) {
+        [_handler suspendRequest:strongToken];
+    }
+}
+
+- (void)resume
+{
+    __strong id strongToken = _requestToken;
+    if (strongToken && [_handler respondsToSelector:@selector(resumeRequest:)]) {
+        [_handler resumeRequest:strongToken];
+    }
+}
+
 - (BOOL)validateRequestToken:(id)requestToken
 {
     if (_requestToken == nil) {
@@ -105,11 +116,11 @@ FUNCTION_NOT_IMPLEMENTED(- (instancetype)init)
 }
 
 #pragma 代理
-- (void)URLRequest:(id)requestToken didSendDataWithProgress:(int64_t)bytesSent
+- (void)URLRequest:(id)requestToken didSendDataWithProgress:(int64_t)bytesSent withTotalBytesSend:(int64_t)totalbytes
 {
     if ([self validateRequestToken:requestToken]) {
         if (_uploadProgressBlock) {
-            _uploadProgressBlock(bytesSent, _request.HTTPBody.length);
+            _uploadProgressBlock(bytesSent,totalbytes == 0 ? _request.HTTPBody.length : totalbytes);
         }
     }
 }
@@ -148,6 +159,56 @@ FUNCTION_NOT_IMPLEMENTED(- (instancetype)init)
             [self invalidate];
         }
     }
+}
+
+@end
+
+@implementation FKNetworkUploadTask
+
+- (void)start
+{
+    if (self.requestToken == nil) {
+        
+        id requestToken = nil;
+        
+        if (_filedata) {
+            requestToken = [_handler sendRequest:self.request withUploadData:_filedata withDelegate:self];
+        }
+        else if (_filepath)
+        {
+            requestToken = [_handler sendRequest:self.request withUploadFileUrl:_filepath withDelegate:self];
+        }
+        
+        if ([self validateRequestToken:requestToken]) {
+            _selfReference = self;
+        }
+    }
+}
+
+- (instancetype)initWithRequest:(NSURLRequest *)request
+                        handler:(id<FKURLRequestHandler>)handler
+                       withData:(NSData *)data
+                completionBlock:(FKURLRequestCompletionBlock)completionBlock
+{
+    self = [super initWithRequest:request handler:handler completionBlock:completionBlock];
+    
+    if (self) {
+        _filedata = [data mutableCopy];
+    }
+    return self;
+}
+
+- (instancetype)initWithRequest:(NSURLRequest *)request
+                        handler:(id<FKURLRequestHandler>)handler
+                   withFilepath:(NSString *)filepath
+                completionBlock:(FKURLRequestCompletionBlock)completionBlock
+{
+    self = [super initWithRequest:request handler:handler completionBlock:completionBlock];
+    
+    if (self) {
+        _filepath = [filepath copy];
+    }
+    return self;
 }
 
 @end

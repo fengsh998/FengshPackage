@@ -42,6 +42,43 @@
     _responseSetting = settings;
 }
 
+- (NSMutableURLRequest *)buildRequest:(NSString *)urlstring
+                              headers:(NSDictionary *)headers
+                               method:(NSString *)method
+                           withParams:(id)params
+{
+     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:urlstring] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0f];
+    [request setHTTPMethod:method];
+    
+    for (NSString *key in headers.allKeys) {
+        NSString *value = headers[key];
+        
+        [request setValue:value forHTTPHeaderField:key];
+    }
+    
+    NSString *query = nil;
+    
+    if (params) {
+        query = QueryStringFromParameters(params);
+    }
+    
+    if ([@[@"GET",@"DELETE",@"HEAD"] containsObject:[method uppercaseString]]) {
+        if (query) {
+            request.URL = [NSURL URLWithString:[[request.URL absoluteString] stringByAppendingFormat:request.URL.query ? @"&%@" : @"?%@", query]];
+        }
+    }
+    else
+    {
+        if (!query) {
+            query = @"";
+        }
+        
+        [request setHTTPBody:[query dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    return request;
+}
+
 - (FKNetworkTask *)requestUrlString:(NSString *)urlstring
                             headers:(NSDictionary *)headers
                             method:(NSString *)method
@@ -72,34 +109,7 @@
     }
     else
     {
-        request = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:urlstring] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60.0f];
-        [request setHTTPMethod:method];
-        
-        for (NSString *key in headers.allKeys) {
-            NSString *value = headers[key];
-            
-            [request setValue:value forHTTPHeaderField:key];
-        }
-        
-        NSString *query = nil;
-        
-        if (params) {
-            query = QueryStringFromParameters(params);
-        }
-        
-        if ([@[@"GET",@"DELETE",@"HEAD"] containsObject:[method uppercaseString]]) {
-            if (query) {
-                request.URL = [NSURL URLWithString:[[request.URL absoluteString] stringByAppendingFormat:request.URL.query ? @"&%@" : @"?%@", query]];
-            }
-        }
-        else
-        {
-            if (!query) {
-                query = @"";
-            }
-            
-            [request setHTTPBody:[query dataUsingEncoding:NSUTF8StringEncoding]];
-        }
+        request = [self buildRequest:urlstring headers:headers method:method withParams:params];
     }
     
     FKNetworkTask *ret = [_networking networkTaskWithRequest:request completionBlock:^(NSURLResponse *response, id responseObj, NSError *error) {
@@ -142,6 +152,19 @@
                         completionBlock:(FKURLRequestCompletionBlock)completionBlock
 {
     return [self requestUrlString:urlstring headers:headers method:@"HEAD" withParams:params completionBlock:completionBlock];
+}
+
+- (FKNetworkTask *)requestHEADUrlString:(NSString *)urlstring
+                                headers:(NSDictionary *)headers
+                             withParams:(id)params
+                                 method:(NSString *)method
+                           withFilepath:(NSString *)filepath
+                        completionBlock:(FKURLRequestCompletionBlock)completionBlock
+{
+    NSMutableURLRequest *request = [self buildRequest:urlstring headers:headers method:method withParams:params];
+    
+    return [_networking sendRequest:request withUploadFileUrl:filepath completionBlock:completionBlock];
+    
 }
 
 @end

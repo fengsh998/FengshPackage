@@ -12,13 +12,16 @@
  */
 
 #import "FKNetworking.h"
-#import "FKLog.h"
-#import "FKNetworkUnits.h"
+
 #import "FKHttpRequestHandler.h"
+#import "FKUploadRequestHandler.h"
 
 @interface FKNetworking()
 {
     FKHttpRequestHandler                                    *_handler;
+    
+    FKUploadRequestHandler                                  *_uploadhandler;
+    
 }
 
 @end
@@ -30,7 +33,8 @@
 {
     self = [super init];
     if (self) {
-        _handler = [[FKHttpRequestHandler alloc]init];
+        
+        
     }
     return self;
 }
@@ -38,12 +42,42 @@
 - (FKNetworkTask *)networkTaskWithRequest:(NSURLRequest *)request
                            completionBlock:(FKURLRequestCompletionBlock)completionBlock
 {
+    if (!_handler) {
+        _handler            = [[FKHttpRequestHandler alloc]init];
+    }
     
     return [[FKNetworkTask alloc] initWithRequest:request
                                            handler:_handler
                                    completionBlock:completionBlock];
 }
 
+- (FKNetworkTask *)sendRequest:(NSURLRequest *)request
+             withUploadFileUrl:(NSString *)fileurl
+               completionBlock:(FKURLRequestCompletionBlock)completionBlock
+{
+    NSAssert(fileurl != nil, @"file path is NULL.");
+    
+    if (!_uploadhandler) {
+        _uploadhandler      = [[FKUploadRequestHandler alloc]init];
+    }
+    
+    FKNetworkUploadTask *task = [[FKNetworkUploadTask alloc] initWithRequest:request handler:_uploadhandler withFilepath:fileurl completionBlock:completionBlock];
+    
+    return task;
+}
+
+- (FKNetworkTask *)sendRequest:(NSURLRequest *)request
+                withUploadData:(NSData *)data
+               completionBlock:(FKURLRequestCompletionBlock)completionBlock
+{
+    if (!_uploadhandler) {
+        _uploadhandler      = [[FKUploadRequestHandler alloc]init];
+    }
+    
+    FKNetworkUploadTask *task = [[FKNetworkUploadTask alloc] initWithRequest:request handler:_uploadhandler withData:data completionBlock:completionBlock];
+    
+    return task;
+}
 
 
 @end

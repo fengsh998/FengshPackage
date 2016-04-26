@@ -20,7 +20,7 @@
  * 发送数据到服务器。如果数据大的时候会被调用多次。
  *
  */
-- (void)URLRequest:(id)requestToken didSendDataWithProgress:(int64_t)bytesSent;
+- (void)URLRequest:(id)requestToken didSendDataWithProgress:(int64_t)bytesSent withTotalBytesSend:(int64_t)totalbytes;
 
 /**
  * 收到响应

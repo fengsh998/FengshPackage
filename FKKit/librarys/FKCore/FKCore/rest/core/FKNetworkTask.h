@@ -25,7 +25,11 @@ typedef void (^FKURLRequestProgressBlock)(int64_t progress, int64_t total);
 typedef void (^FKURLRequestResponseBlock)(NSURLResponse *response);
 
 @interface FKNetworkTask : NSObject <FKURLRequestDelegate>
-
+{
+    NSMutableData                   *_data;
+    id<FKURLRequestHandler>         _handler;
+    FKNetworkTask                   *_selfReference;
+}
 @property (nonatomic, readonly) NSURLRequest *request;
 @property (nonatomic, readonly) NSNumber *requestID;
 @property (nonatomic, readonly, weak) id requestToken;
@@ -41,10 +45,31 @@ typedef void (^FKURLRequestResponseBlock)(NSURLResponse *response);
 - (instancetype)initWithRequest:(NSURLRequest *)request
                         handler:(id<FKURLRequestHandler>)handler
                 completionBlock:(FKURLRequestCompletionBlock)completionBlock NS_DESIGNATED_INITIALIZER;
-
 //开始请求
 - (void)start;
 //取消请求
 - (void)cancel;
+//暂停请求
+- (void)suspend;
+//恢复请求
+- (void)resume;
 
 @end
+
+@interface FKNetworkUploadTask : FKNetworkTask
+@property (nonatomic,readonly) NSData                               *filedata;
+@property (nonatomic,readonly) NSString                             *filepath;
+
+- (instancetype)initWithRequest:(NSURLRequest *)request
+                        handler:(id<FKURLRequestHandler>)handler
+                       withData:(NSData *)data
+                completionBlock:(FKURLRequestCompletionBlock)completionBlock;
+
+- (instancetype)initWithRequest:(NSURLRequest *)request
+                        handler:(id<FKURLRequestHandler>)handler
+                   withFilepath:(NSString *)filepath
+                completionBlock:(FKURLRequestCompletionBlock)completionBlock;
+
+@end
+
+
