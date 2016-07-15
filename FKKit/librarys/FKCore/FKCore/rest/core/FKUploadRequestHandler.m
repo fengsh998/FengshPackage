@@ -117,6 +117,7 @@ withUploadFileUrl:(NSString *)fileurl
     NSURLSessionUploadTask *task = [_session uploadTaskWithRequest:request fromFile:furl];
     [_delegates setObject:delegate forKey:task];
     [task resume];
+    
     return task;
 }
 
@@ -126,7 +127,7 @@ withUploadFileUrl:(NSString *)fileurl
 {
     [self configSession];
     
-    NSURLSessionDataTask *task = [_session uploadTaskWithRequest:request fromData:data];
+    NSURLSessionUploadTask *task = [_session uploadTaskWithRequest:request fromData:data];
     [_delegates setObject:delegate forKey:task];
     [task resume];
     return task;
